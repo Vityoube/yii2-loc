@@ -8,6 +8,7 @@ $config = [
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'language' => 'pl',
+    'defaultRoute'=>'category/index',
     'components' => [
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
@@ -46,8 +47,9 @@ $config = [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
-                 '' => 'site/index', 
-                '<_a:[\w\-]+>' => 'site/<_a>',
+                'category/<id:\d+>'=>'category/view',
+//                 '' => 'site/index', 
+//                '<_a:[\w\-]+>' => 'site/<_a>',
             ],
         ],
         

@@ -9,6 +9,7 @@ use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use app\assets\AppAsset;
 use app\assets\LtAppAsset;
+use yii\bootstrap\Modal;
 
 AppAsset::register($this);
 LtAppAsset::register($this);
@@ -104,11 +105,16 @@ LtAppAsset::register($this);
 					<div class="col-sm-8">
 						<div class="shop-menu pull-right">
 							<ul class="nav navbar-nav">
-								<li><a href="#"><i class="fa fa-user"></i> Account</a></li>
+                                                            <?php if (!Yii::$app->user->isGuest): ?>
+                                                            <li>
+                                                                <a href="<?= yii\helpers\Url::to(['/site/logout'])?>">
+                                                                    <i class="fa fa-user"></i><?=Yii::$app->user->identity->username ?> (Logout)</a>
+                                                            </li>
+                                                                <?php endif; ?>
 								<li><a href="#"><i class="fa fa-star"></i> Wishlist</a></li>
 								<li><a href="checkout.html"><i class="fa fa-crosshairs"></i> Checkout</a></li>
-								<li><a href="cart.html"><i class="fa fa-shopping-cart"></i> Cart</a></li>
-								<li><a href="login.html"><i class="fa fa-lock"></i> Login</a></li>
+                                                                <li><a href="#" onclick="return getCart();"><i class="fa fa-shopping-cart"></i> Cart</a></li>
+                                                                <li><a href="<?= \yii\helpers\Url::to(['/admin'])?>"><i class="fa fa-lock"></i> Login</a></li>
 							</ul>
 						</div>
 					</div>
@@ -153,7 +159,9 @@ LtAppAsset::register($this);
 					</div>
 					<div class="col-sm-3">
 						<div class="search_box pull-right">
-							<input type="text" placeholder="Search"/>
+                                                    <form method="get" action="<?= yii\helpers\Url::to(['category/search']) ?>">
+                                                        <input type="text" placeholder="Search" name="q" />
+                                                    </form>							
 						</div>
 					</div>
 				</div>
@@ -320,6 +328,18 @@ LtAppAsset::register($this);
 		</div>
 		
 	</footer><!--/Footer-->
+        
+<?php Modal::begin([
+   'header'=>'<h2>Your Cart</h2>',
+   'id'=>'cart',
+    'size'=>'modal-lg',
+   'footer'=>'
+        <button type="button" class="btn btn-default" data-dismiss="modal">Continue shopping</button>
+        <a href="'. yii\helpers\Url::to(['cart/view']).'" class="btn btn-success">Order</a>
+        <button type="button" class="btn btn-danger" onclick="clearCart()">Clear cart</button>'
+    
+]); 
+Modal::end();?>        
     <?php $this->endBody() ?>
 </body>
 </html>
